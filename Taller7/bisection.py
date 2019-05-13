@@ -17,12 +17,12 @@ def f(x,e=0.0167,w=2*np.pi/365.25635,t=91):
 
 solution=[]
 def iteration(f,a,b,epsilon=1e-10,i=0,**kwargs):
-	
 	i=i+1
 	c=(a+b)/2
 	A=f(x=a,**kwargs)
 	B=f(x=b,**kwargs)
 	C=f(x=c,**kwargs)
+	
 	if C==0 or (abs((C-A)/A)< epsilon) or (abs((C-B)/B) < epsilon) or abs(C)<=1e-160:
 		#print(' ...Appending root')
 		
@@ -42,7 +42,6 @@ def iteration(f,a,b,epsilon=1e-10,i=0,**kwargs):
 		b=b
 		return iteration(f,a=c,b=b,epsilon=epsilon,i=i,**kwargs)
 	
-	
 	else: return None,None
 
 """
@@ -60,6 +59,7 @@ def bisection(f,a,b,epsilon=1e-20,sample=10000,**kwargs):
 	A, B =f(x=a,**kwargs), f(x=b,**kwargs)
 	C=f(x=c,**kwargs)
 	solution=[]
+	ite=0
 	
 	if A==0:
 		solution.append(a)
@@ -85,14 +85,14 @@ def bisection(f,a,b,epsilon=1e-20,sample=10000,**kwargs):
 				m2 = (f(x=XX[i+2],**kwargs)-ci)/(XX[i+2]-XX[i])
 				if m1*m2 <= 0 :
 					values.append([float(XX[i-1]),float(XX[i+1])])
-		i=0
 		for j in values:
-			SOL = iteration(f,a=j[0],b=j[1],epsilon=epsilon,i=i,**kwargs)
+			ite=0
+			SOL = iteration(f,a=j[0],b=j[1],epsilon=epsilon,i=ite,**kwargs)
 			if isinstance(SOL[0],(int,float)):
-				i = SOL[1]
+				ite = SOL[1]
 				solution.append(SOL[0])
 
-	return solution,i
+	return solution,SOL[1]
 
 
 
@@ -111,7 +111,6 @@ if __name__=='__main__':
 	for i in SOLUTION:
 		j=j+1
 	print('\nThere are {} real roots of the function on [{}:{}]\n Roots:  {}'.format(j,a,b,SOLUTION))
-
 
 	x = np.linspace(a,b,10000)
 	plt.plot(x,f(x))
