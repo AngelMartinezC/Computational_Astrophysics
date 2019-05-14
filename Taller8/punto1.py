@@ -23,28 +23,28 @@ def linear(x,y,sigma=None):
 	elif sigma==None:
 		s = [1 for i in range(len(x))]
 	else: pass
-	#print(s)
+	#print(s,'\n')
 
 	S,X,Y,X2,XY =0,0,0,0,0
 	for i in range(len(s)):
-		S  += 1/(s[i])**2
-		X  += x[i]/(s[i])**2
-		X2 += (x[i])**2/(s[i])**2
-		Y  += y[i]/(s[i])**2
-		XY += x[i]*y[i]/(s[i])**2
+		S  += 1/(s[i]**2)
+		X  += x[i]/(s[i]**2)
+		X2 += (x[i]**2)/(s[i]**2)
+		Y  += y[i]/(s[i]**2)
+		XY += x[i]*y[i]/(s[i]**2)
 
 	b = (Y*X2-X*XY)/(S*X2-X**2)
 	m = (S*XY-X*Y)/(S*X2-X**2)
 
 	return m, b
 
-data = ascii.read('table1.dat',readme='ReadMe')
+data = ascii.read('table2.dat',readme='ReadMe2')
 
 s = data['sigma*']
 logs = np.log10(data['sigma*'])
 logM = data['logM']
 
-err_s = data['e_sigma*']
+err_s = np.log10(data['e_sigma*'])
 err_M = data['e_logM']
 Err_M = data['E_logM']
 
@@ -54,6 +54,10 @@ Err_M = data['E_logM']
 #print(Err_M)
 
 M,   B   = linear(x=logs, y=logM)
+print('M is ',M)
+print('B is ',B)
+print(np.log10(4.02))
+print(np.log10(7.96))
 Mye, Bye = linear(x=logs, y=logM, sigma=err_M)
 MyE, ByE = linear(x=logs, y=logM, sigma=Err_M)
 
@@ -68,6 +72,7 @@ plt.plot(x,M*x+B,label='linear fit')
 plt.plot(x,Mye*x+Bye,label='low fit y')
 plt.plot(x,MyE*x+ByE,label='high fit y')
 plt.legend()
+plt.savefig('Mvssigma.png')
 plt.show()
 
 
