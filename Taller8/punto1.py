@@ -38,42 +38,43 @@ def linear(x,y,sigma=None):
 
 	return m, b
 
-data = ascii.read('table2.dat',readme='ReadMe2')
 
-s = data['sigma*']
-logs = np.log10(data['sigma*'])
-logM = data['logM']
+def plot(name='table1.dat',readme='ReadMe',fig='Mvssigma_noadd.png'):
+	data = ascii.read(name,readme=readme)
 
-err_s = np.log10(data['e_sigma*'])
-err_M = data['e_logM']
-Err_M = data['E_logM']
+	s = data['sigma*']
+	logs = np.log10(data['sigma*'])
+	logM = data['logM']
 
-#print(type(Err_M[79]))
-#print(type(Err_M[0]))
-#print(type(Err_M[5]))
-#print(Err_M)
+	err_s = np.log10(data['e_sigma*'])
+	err_M = data['e_logM']
+	Err_M = data['E_logM']
 
-M,   B   = linear(x=logs, y=logM)
-print('M is ',M)
-print('B is ',B)
-print(np.log10(4.02))
-print(np.log10(7.96))
-Mye, Bye = linear(x=logs, y=logM, sigma=err_M)
-MyE, ByE = linear(x=logs, y=logM, sigma=Err_M)
+	M,   B   = linear(x=logs, y=logM)
+	print('M is ',M)
+	print('B is ',B)
+	print(np.log10(4.02))
+	print(np.log10(7.96))
+	Mye, Bye = linear(x=logs, y=logM, sigma=err_M)
+	MyE, ByE = linear(x=logs, y=logM, sigma=Err_M)
 
-plt.figure(figsize=(5,5))
-x = np.linspace(1.4,2.65,1000)
-plt.xlim(1.4,2.65)
-plt.ylim(4.5,10)
-plt.xticks([1.5,1.75,2,2.25,2.5])
-plt.yticks([5,6,7,8,9])
-plt.plot(logs,logM,'o')
-plt.plot(x,M*x+B,label='linear fit')
-plt.plot(x,Mye*x+Bye,label='low fit y')
-plt.plot(x,MyE*x+ByE,label='high fit y')
-plt.legend()
-plt.savefig('Mvssigma.png')
-plt.show()
+	plt.figure(figsize=(5,5))
+	x = np.linspace(1.4,2.65,1000)
+	plt.xlim(1.4,2.65)
+	plt.ylim(4.5,10)
+	plt.xticks([1.5,1.75,2,2.25,2.5])
+	plt.yticks([5,6,7,8,9])
+	plt.plot(logs,logM,'o',fillstyle='none',markersize=5)
+	plt.plot(x,M*x+B,label='linear fit')
+	plt.plot(x,Mye*x+Bye,label='low fit y')
+	plt.plot(x,MyE*x+ByE,label='high fit y')
+	plt.xlabel(r'$\log (\sigma _{\star} / $ km s$^{-1})$')
+	plt.ylabel(r'$\log ($ $M_{BH}$ $/$ M$\odot $ $)$')
+	plt.legend()
+	plt.savefig(fig)
+	plt.show()
 
 
+plot()
+plot(name='table2.dat',readme='ReadMe2',fig='Mvssigma.png')
 
