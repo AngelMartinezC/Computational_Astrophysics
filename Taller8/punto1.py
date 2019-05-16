@@ -1,7 +1,7 @@
-#
+# -*- coding:utf-8
 
 """
-	Read and optimization
+	Read and optimization. Missing calculation of the sigma in the variable x for the data.
 """
 
 import numpy as np
@@ -54,9 +54,8 @@ def plot(name='table1.dat',readme='ReadMe',fig='Mvssigma_noadd.png'):
 	Err_M = data['E_logM']
 
 	M,   B,   Sm,  Sb  = linear(x=logs, y=logM, sigma=err_M)
-	#Sb = 0.1832
 	
-	print(Sm,Sb)
+	print('Uncertainties are ',Sm,Sb)
 	
 	plt.figure(figsize=(5,5))
 	x = np.linspace(1.4,2.65,1000)
