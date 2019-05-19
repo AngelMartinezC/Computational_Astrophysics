@@ -38,29 +38,43 @@ def gaussian_elimination(A,b):
 			x[i] = xi
 	
 	end = time.time()
-	print('\nThe time involved in calculations was {} s\n'.format(end-start))
+	S = end-start
 	
-	return x
+	return x,S
 
 
-c=0.5
-A = np.loadtxt('LSE4_A.dat')*c
-b = np.loadtxt('LSE4_b.dat')
+def numpy_solver(A,b):
+	
+	#To track the time involved
+	start = time.time()
+	
+	x = np.linalg.solve(A, b)
+	
+	end = time.time()
+	S = end-start
+	
+	return x,S
+
+
+#--------------------------------------------------------------------
+
+c=1
+A = np.loadtxt('LSE1_A.dat')*c
+b = np.loadtxt('LSE1_b.dat')*c
 
 det = np.linalg.det(A)
 sign, log = np.linalg.slogdet(A)
-print(det)
-print(sign*np.exp(log))
-print(log)
-print('det is ',sign*np.exp(log)/c**len(b))
+#print('sign and log ',sign,log)
+print('determinant via det is ',det/c**len(b))
+print('determinant via log is ',sign*np.exp(log)/np.exp(np.log(c**len(b))))
+ 
+x1, s1 = gaussian_elimination(A,b)
+x2, s2 = numpy_solver(A,b)
 
+print('\nSolutions: \n{}\n'.format(x1,x2))
+#To verify if the vector is the answer
+#print(np.allclose(np.dot(A, x1), b))
 
-x = gaussian_elimination(A,b)
-#print(x)
-
-
-
-
-
-
-
+#print times with gauss and numpy
+print('\nThe timing using Gauss was  {} s'.format(s1))
+print('The timing using Numpy was  {} s'.format(s2))
