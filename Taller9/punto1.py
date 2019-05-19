@@ -5,8 +5,12 @@
 """
 
 import numpy as np
+import time
 
 def gaussian_elimination(A,b):
+	
+	#To track the time involved
+	start = time.time()
 	
 	for j in range(0,len(b)):
 		if A[j][j]==0:
@@ -17,39 +21,42 @@ def gaussian_elimination(A,b):
 				a0 = -1*A[j][k]/A[k][k]
 				A[j] = a0*A[k] + A[j]
 				b[j] = a0*b[k] + b[j]
-		
-	x3 = (b[2])/A[2][2]
-	x2 = (b[1]-A[1][2]*x3)/A[1][1]
-	x1 = (b[0]-A[0][1]*x2-A[0][2]*x3)/A[0][0]
 	
+	#Create empty array to put in the results
 	x=[0 for i in range(len(b))]
 	
 	cont = 0
 	for i in range(len(b)-1,0-1,-1):
 		cont=0
-		#print(i,'new\n')
 		if i == len(b)-1:
 			xinit = (b[i])/A[i][i]
 			x[i] = xinit
 		else:
-			#print(x)
 			for j in range(i+1,len(b)-1):
 				cont += A[i][j]*x[j]
-				
-			#	print(i,j,'\n')
 			xi = (b[i] - cont-A[i][len(b)-1]*xinit)/A[i][i]
 			x[i] = xi
 	
-	#x = np.array([x1,x2,x3])
+	end = time.time()
+	print('\nThe time involved in calculations was {} s\n'.format(end-start))
 	
 	return x
 
-A = np.loadtxt('LSE1_A.dat')
-b = np.loadtxt('LSE1_b.dat')
+
+c=0.5
+A = np.loadtxt('LSE4_A.dat')*c
+b = np.loadtxt('LSE4_b.dat')
+
+det = np.linalg.det(A)
+sign, log = np.linalg.slogdet(A)
+print(det)
+print(sign*np.exp(log))
+print(log)
+print('det is ',sign*np.exp(log)/c**len(b))
+
 
 x = gaussian_elimination(A,b)
-
-print(x)
+#print(x)
 
 
 
