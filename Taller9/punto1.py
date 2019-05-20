@@ -6,6 +6,7 @@
 
 import numpy as np
 import time
+np.set_printoptions(threshold=1e10)
 
 def gaussian_elimination(A,b):
 	
@@ -40,7 +41,7 @@ def gaussian_elimination(A,b):
 	end = time.time()
 	S = end-start
 	
-	return x,S
+	return np.array(x),S
 
 
 def numpy_solver(A,b):
