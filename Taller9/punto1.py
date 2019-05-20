@@ -59,23 +59,31 @@ def numpy_solver(A,b):
 
 #--------------------------------------------------------------------
 
-c=1
-A = np.loadtxt('LSE1_A.dat')*c
-b = np.loadtxt('LSE1_b.dat')*c
+def punto1(AAA,bbb):
+	c=1e-10
+	A = np.loadtxt(AAA)*c
+	b = np.loadtxt(bbb)*c
 
-det = np.linalg.det(A)
-sign, log = np.linalg.slogdet(A)
-#print('sign and log ',sign,log)
-print('determinant via det is ',det/c**len(b))
-print('determinant via log is ',sign*np.exp(log)/np.exp(np.log(c**len(b))))
- 
-x1, s1 = gaussian_elimination(A,b)
-x2, s2 = numpy_solver(A,b)
+	det = np.linalg.det(A)
+	sign, log = np.linalg.slogdet(A)
+	print('sign and log for determinant is ',sign,len(b)*np.log(c)*(log/(len(b)*np.log(c))-1))
+	#print('determinant via det is ',det/c**len(b))
+	#print('determinant via log is ',sign*np.exp(log)/np.exp(np.log(c**len(b))))
+	 
+	x1, s1 = gaussian_elimination(A,b)
+	x2, s2 = numpy_solver(A,b)
 
-print('\nSolutions: \n{}\n'.format(x1,x2))
-#To verify if the vector is the answer
-#print(np.allclose(np.dot(A, x1), b))
+	#print('\nSolutions: \n{}\n'.format(x1,x2))
+	#To verify if the vector is the answer
+	#print(np.allclose(np.dot(A, x1), b))
 
-#print times with gauss and numpy
-print('\nThe timing using Gauss was  {} s'.format(s1))
-print('The timing using Numpy was  {} s'.format(s2))
+	#print times with gauss and numpy
+	print('\nThe timing using Gauss was  {} s'.format(s1))
+	print('The timing using Numpy was  {} s\n\n'.format(s2))
+
+
+punto1('LSE1_A.dat','LSE1_b.dat')
+punto1('LSE2_A.dat','LSE2_b.dat')
+punto1('LSE3_A.dat','LSE3_b.dat')
+punto1('LSE4_A.dat','LSE4_b.dat')
+
